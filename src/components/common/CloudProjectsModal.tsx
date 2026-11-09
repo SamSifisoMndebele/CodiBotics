@@ -78,14 +78,14 @@ export const CloudProjectsModal: React.FC<CloudProjectsModalProps> = ({
   const [facilitatorName, setFacilitatorName] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  // Load user projects whenever user changes
+  // Load user projects whenever user changes or modal opens
   useEffect(() => {
-    if (user) {
+    if (user && isOpen) {
       loadProjects();
-    } else {
+    } else if (!user) {
       setUserProjects([]);
     }
-  }, [user]);
+  }, [user, isOpen]);
 
   const loadProjects = async () => {
     if (!user) return;
@@ -170,10 +170,22 @@ export const CloudProjectsModal: React.FC<CloudProjectsModalProps> = ({
   };
 
   const handleDeleteProject = async (projectId: string) => {
-    if (!user || !window.confirm('Are you sure you want to delete this project?')) return;
+    if (!user || !window.confirm('Are you sure you want to delete this project and its share code?')) return;
     try {
+      const target = userProjects.find((p) => p.id === projectId);
       await deleteUserProject(user.uid, projectId);
       setUserProjects((prev) => prev.filter((p) => p.id !== projectId));
+      if (target?.sharedId && lastGeneratedCode === target.sharedId) {
+        setLastGeneratedCode(null);
+      }
+      if (!target?.sharedId) {
+        setLastGeneratedCode(null);
+      }
+      if (target?.sharedId && shareCodeInput.trim().toUpperCase() === target.sharedId) {
+        setShareCodeInput('');
+      }
+      setActionMessage('Project and classroom share code deleted.');
+      setTimeout(() => setActionMessage(null), 3000);
     } catch (err) {
       console.error('Failed to delete project:', err);
     }
@@ -189,6 +201,9 @@ export const CloudProjectsModal: React.FC<CloudProjectsModalProps> = ({
         projectId
       );
       setLastGeneratedCode(code);
+      setUserProjects((prev) =>
+        prev.map((p) => (p.id === projectId ? { ...p, sharedId: code } : p))
+      );
     } catch (err) {
       console.error('Failed to share project:', err);
     }
@@ -508,9 +523,14 @@ export const CloudProjectsModal: React.FC<CloudProjectsModalProps> = ({
                       className="flex items-center justify-between p-3 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 transition-colors"
                     >
                       <div className="space-y-1">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-semibold text-sm text-white">{p.name}</span>
                           {getPhaseBadge(p.phase)}
+                          {p.sharedId && (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                              Code: {p.sharedId}
+                            </span>
+                          )}
                         </div>
                         <p className="text-[11px] text-slate-500">
                           Updated: {new Date(p.updatedAt).toLocaleDateString()} {new Date(p.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

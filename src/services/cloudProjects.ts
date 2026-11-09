@@ -10,6 +10,7 @@ import {
   getDocs,
   deleteDoc,
   query,
+  where,
   orderBy,
   serverTimestamp,
 } from 'firebase/firestore';
@@ -63,7 +64,8 @@ export async function saveProjectToCloud(
 }
 
 /**
- * Fetches all saved projects for the authenticated user.
+ * Fetches all saved projects for the authenticated user,
+ * and cleans up any orphaned shared_projects owned by this user.
  */
 export async function fetchUserProjects(userId: string): Promise<CloudProjectSummary[]> {
   const userProjectsRef = collection(db, 'users', userId, 'projects');
@@ -71,9 +73,11 @@ export async function fetchUserProjects(userId: string): Promise<CloudProjectSum
 
   const snapshot = await getDocs(q);
   const projects: CloudProjectSummary[] = [];
+  const activeProjectIds = new Set<string>();
 
   snapshot.forEach((docSnap) => {
     const data = docSnap.data();
+    activeProjectIds.add(docSnap.id);
     projects.push({
       id: docSnap.id,
       name: data.projectName || 'Untitled Project',
@@ -82,6 +86,27 @@ export async function fetchUserProjects(userId: string): Promise<CloudProjectSum
       sharedId: data.sharedId,
     });
   });
+
+  // Clean up any orphaned shared_projects from previously deleted projects
+  try {
+    const sharedRef = collection(db, 'shared_projects');
+    const sharedQuery = query(sharedRef, where('authorId', '==', userId));
+    const sharedSnap = await getDocs(sharedQuery);
+    const cleanupPromises: Promise<void>[] = [];
+
+    sharedSnap.forEach((sDoc) => {
+      const sData = sDoc.data();
+      if (!sData.id || !activeProjectIds.has(sData.id)) {
+        cleanupPromises.push(deleteDoc(sDoc.ref));
+      }
+    });
+
+    if (cleanupPromises.length > 0) {
+      await Promise.all(cleanupPromises);
+    }
+  } catch {
+    // Ignore cleanup errors if offline
+  }
 
   return projects;
 }
@@ -104,28 +129,77 @@ export async function loadUserProject(
 }
 
 /**
- * Deletes a project from the user's cloud storage.
+ * Deletes a project from the user's cloud storage AND removes its shared classroom code(s).
  */
 export async function deleteUserProject(userId: string, projectId: string): Promise<void> {
   const projectRef = doc(db, 'users', userId, 'projects', projectId);
+
+  // 1. Check if the project has a linked sharedId and delete it directly
+  try {
+    const projectSnap = await getDoc(projectRef);
+    if (projectSnap.exists()) {
+      const sharedId = projectSnap.data()?.sharedId;
+      if (sharedId) {
+        const shareDocRef = doc(db, 'shared_projects', String(sharedId));
+        await deleteDoc(shareDocRef);
+      }
+    }
+  } catch {
+    // Continue even if reading sharedId fails
+  }
+
+  // 2. Also remove any shared_projects matching this userId and projectId
+  try {
+    const sharedRef = collection(db, 'shared_projects');
+    const sharedQuery = query(sharedRef, where('authorId', '==', userId));
+    const sharedSnap = await getDocs(sharedQuery);
+    const deletePromises: Promise<void>[] = [];
+
+    sharedSnap.forEach((sDoc) => {
+      if (sDoc.data().id === projectId) {
+        deletePromises.push(deleteDoc(sDoc.ref));
+      }
+    });
+
+    if (deletePromises.length > 0) {
+      await Promise.all(deletePromises);
+    }
+  } catch {
+    // Ignore if query fails while offline
+  }
+
+  // 3. Delete the user's project document
   await deleteDoc(projectRef);
 }
 
 /**
- * Publishes a project to the shared classroom registry with a 6-digit classroom code or share ID.
+ * Publishes a project to the shared classroom registry with a 6-digit classroom code.
+ * Reuses existing share code if the project was already shared.
  */
 export async function shareProjectToClassroom(
   userId: string,
   authorName: string,
-  project: PulseMakerProjectFile,
+  fallbackProject: PulseMakerProjectFile,
   projectId: string
 ): Promise<string> {
-  // Generate a clean 6-digit uppercase classroom code
-  const shareCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+  const userProjectRef = doc(db, 'users', userId, 'projects', projectId);
+  const userProjectSnap = await getDoc(userProjectRef);
+  const storedData = userProjectSnap.exists()
+    ? (userProjectSnap.data() as PulseMakerProjectFile & { sharedId?: string })
+    : fallbackProject;
+
+  // Reuse existing share code if already shared, otherwise generate a 6-character code
+  const existingCode =
+    userProjectSnap.exists() && userProjectSnap.data()?.sharedId
+      ? String(userProjectSnap.data()?.sharedId)
+      : null;
+  const shareCode =
+    existingCode || Math.random().toString(36).substring(2, 8).toUpperCase();
+
   const shareDocRef = doc(db, 'shared_projects', shareCode);
 
   await setDoc(shareDocRef, {
-    ...project,
+    ...storedData,
     id: projectId,
     authorId: userId,
     authorName,
@@ -134,7 +208,6 @@ export async function shareProjectToClassroom(
   });
 
   // Link sharedId back to user project
-  const userProjectRef = doc(db, 'users', userId, 'projects', projectId);
   await setDoc(userProjectRef, { sharedId: shareCode }, { merge: true });
 
   return shareCode;
