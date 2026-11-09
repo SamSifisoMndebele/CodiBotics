@@ -150,7 +150,7 @@ export function transpileWorkspaceToPython(workspace: Blockly.Workspace | null):
 
   const lines: string[] = [
     '# Auto-generated MicroPython from PulseMaker Blocks',
-    'from pulsemaker import display, music, pin0, pin1, pin2, button_a, button_b, sensors',
+    'from pulsemaker import display, music, pin0, pin1, pin2, button_a, button_b, sensors, Icon',
     'import time',
     '',
   ];
