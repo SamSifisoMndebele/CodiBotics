@@ -12,6 +12,7 @@ import {
 } from './types/simulator';
 import { HeaderNav } from './components/common/HeaderNav';
 import { FacilitatorModal } from './components/common/FacilitatorModal';
+import { CloudProjectsModal } from './components/common/CloudProjectsModal';
 import { FoundationWorkspace } from './components/foundation/FoundationWorkspace';
 import { IntermediateWorkspace } from './components/intermediate/IntermediateWorkspace';
 import { SeniorWorkspace } from './components/senior/SeniorWorkspace';
@@ -22,13 +23,16 @@ import {
 } from './components/senior/LogicGatePlayground';
 import { audioEngine } from './engine/AudioEngine';
 import { useOfflinePWA } from './hooks/useOfflinePWA';
+import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 
 const STORAGE_KEY = 'pulsemaker_simulator_state_v1';
 
 export function App() {
   const { isOnline, markSaved } = useOfflinePWA();
+  const { user } = useFirebaseAuth();
 
   const [activePhase, setActivePhase] = useState<GradePhase>('foundation');
+  const [isCloudOpen, setIsCloudOpen] = useState<boolean>(false);
 
   // Phase 1 State: Foundation
   const [mapId, setMapId] = useState<MapThemeId>('township');
@@ -179,35 +183,55 @@ export function App() {
     URL.revokeObjectURL(url);
   };
 
+  const loadProjectState = (data: PulseMakerProjectFile) => {
+    if (data.activePhase) setActivePhase(data.activePhase);
+    if (data.foundation) {
+      setMapId(data.foundation.mapId || 'township');
+      setCommandQueue(data.foundation.commandQueue || []);
+    }
+    if (data.intermediate) {
+      setBlocklyXml(data.intermediate.blocklyXml || DEFAULT_INTERMEDIATE_XML);
+      setTemperature(data.intermediate.temperature ?? 26);
+      setLightLevel(data.intermediate.lightLevel ?? 180);
+    }
+    if (data.senior) {
+      setSeniorSubMode(data.senior.subMode || 'rover');
+      setMazeWalls(data.senior.walls || []);
+      setLogicNodes(data.senior.logicNodes || DEFAULT_LOGIC_NODES);
+      setLogicWires(data.senior.logicWires || DEFAULT_LOGIC_WIRES);
+      setRoverProgramType(data.senior.roverProgramType || 'line_follow');
+    }
+    audioEngine.playVictory();
+  };
+
   const handleImportProject = (file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
       try {
         const data = JSON.parse(String(reader.result)) as PulseMakerProjectFile;
-        if (data.activePhase) setActivePhase(data.activePhase);
-        if (data.foundation) {
-          setMapId(data.foundation.mapId || 'township');
-          setCommandQueue(data.foundation.commandQueue || []);
-        }
-        if (data.intermediate) {
-          setBlocklyXml(data.intermediate.blocklyXml || DEFAULT_INTERMEDIATE_XML);
-          setTemperature(data.intermediate.temperature ?? 26);
-          setLightLevel(data.intermediate.lightLevel ?? 180);
-        }
-        if (data.senior) {
-          setSeniorSubMode(data.senior.subMode || 'rover');
-          setMazeWalls(data.senior.walls || []);
-          setLogicNodes(data.senior.logicNodes || DEFAULT_LOGIC_NODES);
-          setLogicWires(data.senior.logicWires || DEFAULT_LOGIC_WIRES);
-          setRoverProgramType(data.senior.roverProgramType || 'line_follow');
-        }
-        audioEngine.playVictory();
+        loadProjectState(data);
       } catch (err) {
         alert('Invalid .pulsemaker project file.');
         console.error(err);
       }
     };
     reader.readAsText(file);
+  };
+
+  const currentProjectSnapshot: PulseMakerProjectFile = {
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    projectName: `pulsemaker-${activePhase}-project`,
+    activePhase,
+    foundation: { mapId, commandQueue },
+    intermediate: { blocklyXml, temperature, lightLevel },
+    senior: {
+      subMode: seniorSubMode,
+      walls: mazeWalls,
+      logicNodes,
+      logicWires,
+      roverProgramType,
+    },
   };
 
   return (
@@ -222,9 +246,11 @@ export function App() {
         facilitator={facilitator}
         onToggleMute={handleToggleMute}
         onOpenFacilitatorModal={() => setIsFacilitatorOpen(true)}
+        onOpenCloudModal={() => setIsCloudOpen(true)}
         onExportProject={handleExportProject}
         onImportProject={handleImportProject}
         isOnline={isOnline}
+        cloudUserDisplayName={user?.displayName || (user?.isAnonymous ? 'Learner (Cloud)' : user?.email)}
       />
 
       <main className="flex-1">
@@ -270,6 +296,13 @@ export function App() {
         onClose={() => setIsFacilitatorOpen(false)}
         settings={facilitator}
         onUpdateSettings={setFacilitator}
+      />
+
+      <CloudProjectsModal
+        isOpen={isCloudOpen}
+        onClose={() => setIsCloudOpen(false)}
+        currentProject={currentProjectSnapshot}
+        onLoadProject={loadProjectState}
       />
     </div>
   );

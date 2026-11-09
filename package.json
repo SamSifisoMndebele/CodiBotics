@@ -1,11 +1,13 @@
 {
   "name": "pulsemaker-simulator",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Zero-install, offline-first robotics and logic simulation platform for South African primary schools (Grade R to Grade 7)",
   "scripts": {
     "dev": "vite",
+    "firebase:emulators": "firebase emulators:start",
+    "firebase:deploy": "firebase deploy",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

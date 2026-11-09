@@ -13,6 +13,7 @@ import {
   Wifi,
   WifiOff,
   BookOpen,
+  Cloud,
 } from 'lucide-react';
 import { GradePhase, FacilitatorSettings } from '../../types/simulator';
 
@@ -22,9 +23,11 @@ interface HeaderNavProps {
   facilitator: FacilitatorSettings;
   onToggleMute: () => void;
   onOpenFacilitatorModal: () => void;
+  onOpenCloudModal: () => void;
   onExportProject: () => void;
   onImportProject: (file: File) => void;
   isOnline: boolean;
+  cloudUserDisplayName?: string | null;
 }
 
 export const HeaderNav: React.FC<HeaderNavProps> = ({
@@ -33,9 +36,11 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   facilitator,
   onToggleMute,
   onOpenFacilitatorModal,
+  onOpenCloudModal,
   onExportProject,
   onImportProject,
   isOnline,
+  cloudUserDisplayName,
 }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -165,6 +170,22 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             )}
             <span>{isOnline ? 'Offline-Ready PWA' : 'Offline Mode'}</span>
           </div>
+
+          {/* Cloud Workspace & Classroom Code */}
+          <button
+            onClick={onOpenCloudModal}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+              cloudUserDisplayName
+                ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/25'
+                : 'bg-slate-800 hover:bg-slate-700 text-sky-400 border-slate-700'
+            }`}
+            title="Open Firebase Cloud Projects & Classroom Sharing"
+          >
+            <Cloud className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">
+              {cloudUserDisplayName ? cloudUserDisplayName : 'Cloud Projects'}
+            </span>
+          </button>
 
           {/* Save (.pulsemaker JSON) */}
           <button
