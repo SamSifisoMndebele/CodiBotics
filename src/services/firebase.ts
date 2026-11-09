@@ -1,6 +1,5 @@
 // ============================================================================
 // PulseMaker Simulator - Firebase SDK Configuration & Initialization
-// Production-ready with Offline IndexedDB Persistence & Environment Variables
 // ============================================================================
 
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
@@ -14,14 +13,15 @@ import {
 } from 'firebase/firestore';
 import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
 
+// Public Firebase Web Configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyB7-DWkHoq1Yms6iIkCR1QEyOHNS1x2eAQ',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'pulsemaker-simulator.firebaseapp.com',
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'pulsemaker-simulator',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'pulsemaker-simulator.firebasestorage.app',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '220201944572',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:220201944572:web:5c895ca0587f752eb05e79',
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || 'G-20S1P4H4CG',
+  apiKey: 'AIzaSyB7-DWkHoq1Yms6iIkCR1QEyOHNS1x2eAQ',
+  authDomain: 'pulsemaker-simulator.firebaseapp.com',
+  projectId: 'pulsemaker-simulator',
+  storageBucket: 'pulsemaker-simulator.firebasestorage.app',
+  messagingSenderId: '220201944572',
+  appId: '1:220201944572:web:5c895ca0587f752eb05e79',
+  measurementId: 'G-20S1P4H4CG',
 };
 
 // Singleton App Instance
@@ -30,7 +30,7 @@ export const app: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseC
 // Auth Instance
 export const auth: Auth = getAuth(app);
 
-// Firestore Instance with robust Multi-Tab Offline Cache
+// Firestore Instance with Multi-Tab Offline Cache
 let firestoreDb: Firestore;
 try {
   firestoreDb = initializeFirestore(app, {
@@ -39,7 +39,6 @@ try {
     }),
   });
 } catch {
-  // If already initialized or in fallback environments (e.g. strict private browsing)
   firestoreDb = getFirestore(app);
 }
 
@@ -55,6 +54,6 @@ if (typeof window !== 'undefined') {
       }
     })
     .catch(() => {
-      // Analytics not supported or blocked by ad-blocker
+      // Analytics not supported or blocked
     });
 }
