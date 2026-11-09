@@ -14,13 +14,6 @@ Install via pip:
 pip install pulsemaker-simulator
 ```
 
-Or install locally in editable mode:
-
-```bash
-# From the project root
-pip install -e ./python
-```
-
 ---
 
 ## Quick Example (Intermediate Phase 5x5 Board)

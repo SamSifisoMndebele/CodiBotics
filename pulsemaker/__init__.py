@@ -25,7 +25,7 @@ if not hasattr(time, "sleep_ms"):
 if not hasattr(builtins, "Icon"):
     setattr(builtins, "Icon", Icon)
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __all__ = [
     "display",
