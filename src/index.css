@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    user-select: none;
+  }
+}
+
+/* Blockly Dark Theme Tweaks for Classroom Readability */
+.blocklyMainBackground {
+  stroke: #1e293b !important;
+  fill: #0f172a !important;
+}
+.blocklyToolboxDiv {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-right: 1px solid #334155 !important;
+}
+.blocklyTreeRow {
+  padding: 6px 10px !important;
+  margin-bottom: 4px !important;
+  border-radius: 8px !important;
+}
+.blocklyFlyoutBackground {
+  fill: #1e293b !important;
+  fill-opacity: 0.95 !important;
+}
