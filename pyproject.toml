@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pulsemaker-simulator"
+version = "1.0.0"
+description = "Python and MicroPython runtime library for PulseMaker Simulator (DBE CAPS Coding & Robotics)"
+readme = "README.md"
+authors = [{ name = "PulseMaker Simulator Team" }]
+license = { text = "MIT" }
+requires-python = ">=3.8"
+keywords = ["robotics", "simulator", "micropython", "education", "stem", "caps"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Education",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = []
+
+[project.scripts]
+pulsemaker = "pulsemaker.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pulsemaker*", "pulsemaker_rover*"]
