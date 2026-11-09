@@ -30,16 +30,22 @@ export const app: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseC
 // Auth Instance
 export const auth: Auth = getAuth(app);
 
-// Firestore Instance with Multi-Tab Offline Cache
+// Firestore Instance with Multi-Tab Offline Cache (using named database 'default')
+const DATABASE_ID = 'default';
+
 let firestoreDb: Firestore;
 try {
-  firestoreDb = initializeFirestore(app, {
-    localCache: persistentLocalCache({
-      tabManager: persistentMultipleTabManager(),
-    }),
-  });
+  firestoreDb = initializeFirestore(
+    app,
+    {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager(),
+      }),
+    },
+    DATABASE_ID
+  );
 } catch {
-  firestoreDb = getFirestore(app);
+  firestoreDb = getFirestore(app, DATABASE_ID);
 }
 
 export const db: Firestore = firestoreDb;
