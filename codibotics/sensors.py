@@ -1,5 +1,5 @@
 """
-PulseMaker Virtual Environment Sensors
+CodiBotics Virtual Environment Sensors
 """
 import os
 
@@ -11,9 +11,9 @@ class Sensors:
     def temperature(self) -> float:
         """
         Get live simulated ambient temperature in °C.
-        Can be overridden via environment variable PULSEMAKER_TEMP=35.
+        Can be overridden via environment variable CODIBOTICS_TEMP=35.
         """
-        env_val = os.environ.get("PULSEMAKER_TEMP")
+        env_val = os.environ.get("CODIBOTICS_TEMP")
         if env_val:
             try:
                 return float(env_val)
@@ -24,9 +24,9 @@ class Sensors:
     def light_level(self) -> int:
         """
         Get live simulated light level (0-255).
-        Can be overridden via environment variable PULSEMAKER_LIGHT=200.
+        Can be overridden via environment variable CODIBOTICS_LIGHT=200.
         """
-        env_val = os.environ.get("PULSEMAKER_LIGHT")
+        env_val = os.environ.get("CODIBOTICS_LIGHT")
         if env_val:
             try:
                 return int(env_val)

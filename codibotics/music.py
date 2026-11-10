@@ -1,5 +1,5 @@
 """
-PulseMaker Piezo Buzzer Sound Synthesizer
+CodiBotics Piezo Buzzer Sound Synthesizer
 """
 import sys
 import time
@@ -32,7 +32,7 @@ class Music:
 
         if not played:
             # Fallback for systems without hardware beep
-            print(f"[PulseMaker Buzzer ♫ {freq} Hz for {dur_ms} ms]", flush=True)
+            print(f"[CodiBotics Buzzer ♫ {freq} Hz for {dur_ms} ms]", flush=True)
             time.sleep(dur_ms / 1000.0)
 
 music = Music()

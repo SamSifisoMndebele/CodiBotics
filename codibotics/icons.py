@@ -1,5 +1,5 @@
 """
-PulseMaker 5x5 LED Matrix Icon Presets
+CodiBotics 5x5 LED Matrix Icon Presets
 """
 from typing import List
 
@@ -13,7 +13,7 @@ class IconImage:
 
 class _IconMeta(type):
     def __getattr__(cls, name: str):
-        raise AttributeError(f"Icon '{name}' does not exist on PulseMaker Icon set.")
+        raise AttributeError(f"Icon '{name}' does not exist on CodiBotics Icon set.")
 
 class Icon(metaclass=_IconMeta):
     HEART = IconImage("HEART", [

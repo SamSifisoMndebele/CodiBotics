@@ -1,5 +1,5 @@
 """
-PulseMaker Push Buttons A & B
+CodiBotics Push Buttons A & B
 """
 import os
 
@@ -11,9 +11,9 @@ class Button:
     def is_pressed(self) -> bool:
         """
         Check if the button is currently pressed.
-        Can be influenced by environment variables PULSEMAKER_BUTTON_A=1 / PULSEMAKER_BUTTON_B=1.
+        Can be influenced by environment variables CODIBOTICS_BUTTON_A=1 / CODIBOTICS_BUTTON_B=1.
         """
-        env_val = os.environ.get(f"PULSEMAKER_BUTTON_{self.name.upper()}", "")
+        env_val = os.environ.get(f"CODIBOTICS_BUTTON_{self.name.upper()}", "")
         if env_val in ("1", "true", "True"):
             return True
         return self._pressed

@@ -1,5 +1,5 @@
 """
-PulseMaker 2D Autonomous Rover Controller (Grade 7 Senior Phase)
+CodiBotics 2D Autonomous Rover Controller (Grade 7 Senior Phase)
 """
 import os
 import random
@@ -11,9 +11,9 @@ class UltrasonicSensor:
     def distance_cm(self) -> int:
         """
         Return simulated ultrasonic distance in cm.
-        Can be overridden via PULSEMAKER_ROVER_DISTANCE=45.
+        Can be overridden via CODIBOTICS_ROVER_DISTANCE=45.
         """
-        env_val = os.environ.get("PULSEMAKER_ROVER_DISTANCE")
+        env_val = os.environ.get("CODIBOTICS_ROVER_DISTANCE")
         if env_val:
             try:
                 return int(env_val)

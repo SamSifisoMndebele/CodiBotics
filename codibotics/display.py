@@ -1,5 +1,5 @@
 """
-PulseMaker 5x5 LED Matrix Display Controller
+CodiBotics 5x5 LED Matrix Display Controller
 """
 import sys
 from typing import Union, List

@@ -1,5 +1,5 @@
 """
-PulseMaker Simulator - Python & MicroPython Runtime
+CodiBotics Simulator - Python & MicroPython Runtime
 DBE CAPS Coding & Robotics Platform
 """
 import sys

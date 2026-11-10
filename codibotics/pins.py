@@ -1,5 +1,5 @@
 """
-PulseMaker GPIO Edge Connector Pins (P0, P1, P2)
+CodiBotics GPIO Edge Connector Pins (P0, P1, P2)
 """
 
 class Pin:
@@ -13,7 +13,7 @@ class Pin:
         """
         self.value = 1 if value else 0
         state_str = "HIGH (1)" if self.value else "LOW (0)"
-        print(f"[PulseMaker Pin {self.name} -> {state_str}]", flush=True)
+        print(f"[CodiBotics Pin {self.name} -> {state_str}]", flush=True)
 
     def read_digital(self) -> int:
         """
