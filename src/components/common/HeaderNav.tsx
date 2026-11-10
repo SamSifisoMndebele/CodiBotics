@@ -14,6 +14,7 @@ import {
   WifiOff,
   BookOpen,
   Cloud,
+  Home,
 } from 'lucide-react';
 import { GradePhase, FacilitatorSettings } from '../../types/simulator';
 import { CodiBoticsLogo } from './CodiBoticsLogo';
@@ -29,6 +30,7 @@ interface HeaderNavProps {
   onImportProject: (file: File) => void;
   isOnline: boolean;
   cloudUserDisplayName?: string | null;
+  onOpenLandingPage?: () => void;
 }
 
 export const HeaderNav: React.FC<HeaderNavProps> = ({
@@ -42,6 +44,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   onImportProject,
   isOnline,
   cloudUserDisplayName,
+  onOpenLandingPage,
 }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -86,21 +89,39 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   return (
     <header className="bg-slate-900/95 border-b border-slate-800 px-4 py-2.5 sticky top-0 z-30 backdrop-blur-md">
       <div className="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
-        {/* Brand Identity */}
+        {/* Brand Identity & Home Button */}
         <div className="flex items-center gap-3">
-          <CodiBoticsLogo className="w-10 h-10 shrink-0 shadow-lg shadow-emerald-500/20 rounded-xl" />
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-bold text-lg tracking-tight text-white leading-none">
-                Codi<span className="text-emerald-400">Botics</span>
-              </h1>
-              <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                DBE CAPS
-              </span>
+          {onOpenLandingPage && (
+            <button
+              onClick={onOpenLandingPage}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700 transition-colors"
+              title="Back to CodiBotics Landing Page"
+            >
+              <Home className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden xl:inline">Home</span>
+            </button>
+          )}
+          <div
+            onClick={onOpenLandingPage}
+            className={`flex items-center gap-3 ${
+              onOpenLandingPage ? 'cursor-pointer group' : ''
+            }`}
+            title={onOpenLandingPage ? 'Return to CodiBotics Landing Page' : undefined}
+          >
+            <CodiBoticsLogo className="w-10 h-10 shrink-0 shadow-lg shadow-emerald-500/20 rounded-xl group-hover:scale-105 transition-transform" />
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="font-bold text-lg tracking-tight text-white leading-none">
+                  Codi<span className="text-emerald-400">Botics</span>
+                </h1>
+                <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  DBE CAPS
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5 hidden sm:block">
+                Zero-Install Offline Coding & Robotics Simulator
+              </p>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5 hidden sm:block">
-              Zero-Install Offline Coding & Robotics Simulator
-            </p>
           </div>
         </div>
 

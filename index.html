@@ -1,16 +1,173 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-ZA" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodiBotics — Free DBE CAPS Coding &amp; Robotics Simulator for South African Schools (Grades R–7)</title>
+    <meta
+      name="description"
+      content="CodiBotics is a free, zero-install, 100% offline-ready Coding, Logic &amp; Robotics web simulator and Python SDK built for South African primary schools following the DBE CAPS curriculum (Grades R to 7)."
+    />
+    <meta
+      name="keywords"
+      content="CodiBotics, Coding and Robotics South Africa, DBE CAPS Coding and Robotics, Grades R to 7 Robotics Simulator, Foundation Phase Floor Robot, Intermediate Phase Blockly MicroPython, Senior Phase Grade 7 Robotics, Offline Coding App South Africa, Digital Logic Gates Simulator, 5x5 LED Microcontroller Simulator, pip install codibotics"
+    />
+    <meta name="author" content="CodiBotics Education South Africa" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="application-name" content="CodiBotics" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="CodiBotics" />
+    <meta name="geo.region" content="ZA" />
+    <meta name="geo.placename" content="South Africa" />
+
+    <!-- Canonical & Icons -->
+    <link rel="canonical" href="https://codibotics.web.app/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#0f172a" />
-    <meta name="description" content="CodiBotics — Zero-install, offline-first Coding, Logic & Robotics Simulator for South African Primary Schools (DBE CAPS Grades R–7)" />
-    <title>CodiBotics — DBE CAPS Coding & Robotics Simulator (Grades R–7)</title>
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CodiBotics" />
+    <meta property="og:locale" content="en_ZA" />
+    <meta property="og:url" content="https://codibotics.web.app/" />
+    <meta
+      property="og:title"
+      content="CodiBotics — Zero-Install DBE CAPS Coding &amp; Robotics Simulator (Grades R–7)"
+    />
+    <meta
+      property="og:description"
+      content="Empower every South African classroom with a 100% offline-first Coding, Logic &amp; Robotics simulator. From Grade R Floor Bots to Grade 7 Autonomous Rovers, Digital Logic Gates &amp; MicroPython."
+    />
+    <meta property="og:image" content="https://codibotics.web.app/og-image.svg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="CodiBotics — DBE CAPS Coding &amp; Robotics Simulator for Grades R–7" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="CodiBotics — DBE CAPS Coding &amp; Robotics Simulator (Grades R–7)"
+    />
+    <meta
+      name="twitter:description"
+      content="Zero-install, 100% offline-ready Coding, Logic &amp; Robotics simulator and Python SDK for South African Primary Schools (Grades R–7)."
+    />
+    <meta name="twitter:image" content="https://codibotics.web.app/og-image.svg" />
+
+    <!-- JSON-LD Structured Data for Search Engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://codibotics.web.app/#website",
+            "url": "https://codibotics.web.app/",
+            "name": "CodiBotics",
+            "description": "Zero-install, offline-first Coding, Logic & Robotics Simulator for South African Primary Schools (DBE CAPS Grades R–7)",
+            "inLanguage": "en-ZA"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://codibotics.web.app/#application",
+            "name": "CodiBotics Simulator",
+            "applicationCategory": "EducationalApplication",
+            "applicationSubCategory": "Coding and Robotics Simulator",
+            "operatingSystem": "Web Browser, Windows, Android, ChromeOS, macOS, Linux, iOS",
+            "url": "https://codibotics.web.app/app",
+            "image": "https://codibotics.web.app/og-image.svg",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "ZAR",
+              "availability": "https://schema.org/InStock"
+            },
+            "educationalAlignment": [
+              {
+                "@type": "AlignmentObject",
+                "alignmentType": "teaches",
+                "educationalFramework": "South African DBE CAPS Coding and Robotics Curriculum",
+                "targetName": "Foundation Phase (Grades R–3): Pattern Recognition, Algorithms & Floor Robot Navigation"
+              },
+              {
+                "@type": "AlignmentObject",
+                "alignmentType": "teaches",
+                "educationalFramework": "South African DBE CAPS Coding and Robotics Curriculum",
+                "targetName": "Intermediate Phase (Grades 4–6): Blockly Visual Coding, 5x5 LED Microcontroller, Sensors & MicroPython"
+              },
+              {
+                "@type": "AlignmentObject",
+                "alignmentType": "teaches",
+                "educationalFramework": "South African DBE CAPS Coding and Robotics Curriculum",
+                "targetName": "Senior Phase (Grade 7): 2D Differential Drive Autonomous Rover, Ultrasonic Raycasting & Digital Logic Gates"
+              }
+            ],
+            "featureList": [
+              "100% Offline-First Progressive Web App (PWA) with zero data usage after initial load",
+              "Foundation Phase (Grades R–3) Icon-driven Floor Robot on South African themed 5x5 maps",
+              "Intermediate Phase (Grades 4–6) Blockly to MicroPython transpiler and virtual 5x5 LED matrix microcontroller",
+              "Senior Phase (Grade 7) 2D Autonomous Rover physics simulator and interactive Digital Logic Gate builder",
+              "Teacher & Facilitator Control Panel with classroom phase locking and printable unplugged CAPS task cards",
+              "Companion Python & MicroPython library installable via pip install codibotics"
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://codibotics.web.app/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is CodiBotics and how does it align with the South African DBE CAPS curriculum?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "CodiBotics is a zero-install, offline-first Coding, Logic, and Robotics simulation platform built specifically for South African primary schools from Grade R to Grade 7. It covers Foundation Phase (Grades R–3) directional icon coding, Intermediate Phase (Grades 4–6) Blockly and 5x5 LED microcontroller simulation with live MicroPython code generation, and Senior Phase (Grade 7) 2D autonomous rover kinematics and Boolean digital logic gates."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does CodiBotics work offline without internet or during load-shedding?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. CodiBotics is engineered as an Offline-First Progressive Web App (PWA). Once opened once in any modern browser, the entire simulator caches locally on the device and runs 100% offline with zero mobile data consumption. Learners can also save and load .codibotics project files directly to computers or USB flash drives."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do schools need physical robotics kits to teach with CodiBotics?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No hardware is required. CodiBotics simulates floor robots, 5x5 LED microcontrollers, environmental sensors, piezo buzzers, ultrasonic rovers, and logic circuits directly in the browser. When learners transition to desktop Python or physical MicroPython boards, they can install our companion package using pip install codibotics."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-white overflow-x-hidden">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Semantic SEO Fallback Content for Search Engine Crawlers -->
+      <main style="max-width: 960px; margin: 0 auto; padding: 2rem; font-family: system-ui, sans-serif;">
+        <h1>CodiBotics — Zero-Install Offline Coding, Logic &amp; Robotics Simulator for South African Schools (DBE CAPS Grades R–7)</h1>
+        <p>
+          Empowering South African primary schools with a free, 100% offline-capable Coding and Robotics platform aligned with the Department of Basic Education (DBE) CAPS curriculum for Grades R to 7.
+        </p>
+        <p><a href="/app">Launch CodiBotics Web App Simulator</a></p>
+        <section>
+          <h2>DBE CAPS Curriculum Phases (Grades R–7)</h2>
+          <h3>Foundation Phase (Grades R–3): Tactile Floor Robot &amp; Spatial Grid Maps</h3>
+          <p>Learn algorithmic sequencing, pattern recognition, and spatial navigation across South African themed 5x5 mats including Township Solar Grid, Kruger Wildlife Safari, and Cape Town Harbour.</p>
+          <h3>Intermediate Phase (Grades 4–6): Blockly Visual Coding, 5x5 Microcontroller &amp; MicroPython</h3>
+          <p>Build programs with Blockly blocks, test on a virtual 5x5 LED matrix microcontroller with temperature, light, button, and pin sensors, and transpile directly to real MicroPython code.</p>
+          <h3>Senior Phase (Grade 7): 2D Autonomous Rover Kinematics &amp; Digital Logic Gates</h3>
+          <p>Program differential-drive autonomous rovers with ultrasonic raycasting and line-following sensors, and design Boolean logic circuits with AND, OR, NOT, XOR, and NAND gates.</p>
+        </section>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

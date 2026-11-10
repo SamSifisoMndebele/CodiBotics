@@ -13,6 +13,7 @@ import {
 import { HeaderNav } from './components/common/HeaderNav';
 import { FacilitatorModal } from './components/common/FacilitatorModal';
 import { CloudProjectsModal } from './components/common/CloudProjectsModal';
+import { LandingPage } from './components/landing/LandingPage';
 import { FoundationWorkspace } from './components/foundation/FoundationWorkspace';
 import { IntermediateWorkspace } from './components/intermediate/IntermediateWorkspace';
 import { SeniorWorkspace } from './components/senior/SeniorWorkspace';
@@ -30,6 +31,20 @@ const STORAGE_KEY = 'codibotics_simulator_state_v1';
 export function App() {
   const { isOnline, markSaved } = useOfflinePWA();
   const { user } = useFirebaseAuth();
+
+  const [viewMode, setViewMode] = useState<'landing' | 'app'>(() => {
+    if (typeof window === 'undefined') return 'landing';
+    const path = window.location.pathname.toLowerCase();
+    const params = new URLSearchParams(window.location.search);
+    if (
+      path.startsWith('/app') ||
+      params.get('app') === '1' ||
+      params.has('phase')
+    ) {
+      return 'app';
+    }
+    return 'landing';
+  });
 
   const [activePhase, setActivePhase] = useState<GradePhase>('foundation');
   const [isCloudOpen, setIsCloudOpen] = useState<boolean>(false);
@@ -98,7 +113,56 @@ export function App() {
     } catch (e) {
       console.warn('Failed to restore state from localStorage:', e);
     }
+
+    // Override phase if specified in URL query string (?phase=foundation|intermediate|senior)
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlPhase = params.get('phase');
+      if (
+        urlPhase === 'foundation' ||
+        urlPhase === 'intermediate' ||
+        urlPhase === 'senior'
+      ) {
+        setActivePhase(urlPhase);
+      }
+    } catch {
+      // Ignore URL parsing issues
+    }
   }, []);
+
+  // Sync browser back/forward navigation between Landing Page and Web App
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname.toLowerCase();
+      const params = new URLSearchParams(window.location.search);
+      if (
+        path.startsWith('/app') ||
+        params.get('app') === '1' ||
+        params.has('phase')
+      ) {
+        setViewMode('app');
+      } else {
+        setViewMode('landing');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Dynamically update document title for SEO & clarity
+  useEffect(() => {
+    if (viewMode === 'landing') {
+      document.title =
+        'CodiBotics — Free DBE CAPS Coding & Robotics Simulator for South African Schools (Grades R–7)';
+    } else {
+      const phaseNames: Record<GradePhase, string> = {
+        foundation: 'Foundation Phase (Grades R–3) Floor Bot',
+        intermediate: 'Intermediate Phase (Grades 4–6) Blockly & 5x5 Board',
+        senior: 'Senior Phase (Grade 7) 2D Rover & Logic Gates',
+      };
+      document.title = `${phaseNames[activePhase]} | CodiBotics Web App`;
+    }
+  }, [viewMode, activePhase]);
 
   // Auto-persist to localStorage on state changes
   useEffect(() => {
@@ -234,6 +298,51 @@ export function App() {
     },
   };
 
+  const handleLaunchApp = (options?: {
+    phase?: GradePhase;
+    seniorSubMode?: SeniorSubMode;
+    openTeacherModal?: boolean;
+  }) => {
+    audioEngine.playClick();
+    let targetPhase = activePhase;
+    if (
+      options?.phase &&
+      (!facilitator.lockedPhase || facilitator.lockedPhase === options.phase)
+    ) {
+      targetPhase = options.phase;
+      setActivePhase(options.phase);
+    }
+    if (options?.seniorSubMode) {
+      setSeniorSubMode(options.seniorSubMode);
+    }
+    if (options?.openTeacherModal) {
+      setIsFacilitatorOpen(true);
+    }
+    setViewMode('app');
+    try {
+      const nextUrl = options?.phase ? `/app?phase=${targetPhase}` : '/app';
+      window.history.pushState({ viewMode: 'app' }, '', nextUrl);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {
+      // Ignore history API errors in restricted environments
+    }
+  };
+
+  const handleOpenLandingPage = () => {
+    audioEngine.playClick();
+    setViewMode('landing');
+    try {
+      window.history.pushState({ viewMode: 'landing' }, '', '/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {
+      // Ignore history API errors
+    }
+  };
+
+  if (viewMode === 'landing') {
+    return <LandingPage onLaunchApp={handleLaunchApp} isOnline={isOnline} />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
       <HeaderNav
@@ -251,6 +360,7 @@ export function App() {
         onImportProject={handleImportProject}
         isOnline={isOnline}
         cloudUserDisplayName={user?.displayName || (user?.isAnonymous ? 'Learner (Cloud)' : user?.email)}
+        onOpenLandingPage={handleOpenLandingPage}
       />
 
       <main className="flex-1">
