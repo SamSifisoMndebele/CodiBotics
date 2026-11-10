@@ -180,5 +180,3 @@ export interface CodiBoticsProjectFile {
     roverProgramType: 'line_follow' | 'obstacle_avoid' | 'manual_motors' | 'blockly_custom';
   };
 }
-
-export type PulseMakerProjectFile = CodiBoticsProjectFile;

@@ -206,7 +206,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           <input
             ref={fileInputRef}
             type="file"
-            accept=".codibotics,.pulsemaker,.json"
+            accept=".codibotics,.json"
             onChange={handleFileChange}
             className="hidden"
           />
