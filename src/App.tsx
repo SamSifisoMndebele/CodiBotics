@@ -26,7 +26,6 @@ import { useOfflinePWA } from './hooks/useOfflinePWA';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 
 const STORAGE_KEY = 'codibotics_simulator_state_v1';
-const LEGACY_STORAGE_KEY = 'pulsemaker_simulator_state_v1';
 
 export function App() {
   const { isOnline, markSaved } = useOfflinePWA();
@@ -75,7 +74,7 @@ export function App() {
   // Restore saved state from localStorage on first mount
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       const parsed = JSON.parse(raw) as Partial<CodiBoticsProjectFile>;
       if (parsed.activePhase) setActivePhase(parsed.activePhase);
