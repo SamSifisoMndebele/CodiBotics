@@ -301,7 +301,7 @@ export const RoverMazeSimulator: React.FC<RoverMazeSimulatorProps> = ({
   const generatedPython =
     programMode === 'obstacle_avoid'
       ? `# Grade 7 Autonomous Ultrasonic Obstacle Avoidance
-from pulsemaker_rover import Rover
+from codibotics_rover import Rover
 rover = Rover()
 
 while True:
@@ -314,7 +314,7 @@ while True:
         rover.motors(v_left=70, v_right=70)`
       : programMode === 'line_follow'
       ? `# Grade 7 Infrared Optical Line Follower
-from pulsemaker_rover import Rover
+from codibotics_rover import Rover
 rover = Rover()
 
 while True:
@@ -328,7 +328,7 @@ while True:
     else:
         rover.motors(v_left=60, v_right=60)`
       : `# Grade 7 Differential Drive Kinematics (v_L, v_R)
-from pulsemaker_rover import Rover
+from codibotics_rover import Rover
 rover = Rover()
 
 # Direct wheel velocity control

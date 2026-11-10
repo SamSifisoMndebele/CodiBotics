@@ -7,11 +7,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'assets/**/*'],
+      includeAssets: ['favicon.svg', 'logo.svg', 'assets/**/*'],
       manifest: {
-        name: 'PulseMaker Simulator',
-        short_name: 'PulseMaker',
-        description: 'Offline-first Coding & Robotics Simulator for South African Primary Schools (CAPS Grade R-7)',
+        name: 'CodiBotics Simulator',
+        short_name: 'CodiBotics',
+        description: 'Offline-first Coding, Logic & Robotics Simulator for South African Primary Schools (DBE CAPS Grades R–7)',
         theme_color: '#0f172a',
         background_color: '#0f172a',
         display: 'standalone',
@@ -20,6 +20,12 @@ export default defineConfig({
           {
             src: 'favicon.svg',
             sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any maskable'
+          },
+          {
+            src: 'logo.svg',
+            sizes: '512x512',
             type: 'image/svg+xml',
             purpose: 'any maskable'
           }

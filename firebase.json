@@ -86,8 +86,8 @@
       "anonymous": true,
       "emailPassword": true,
       "googleSignIn": {
-        "oAuthBrandDisplayName": "PulseMaker Simulator",
-        "supportEmail": "support@pulsemaker-simulator.firebaseapp.com"
+        "oAuthBrandDisplayName": "CodiBotics",
+        "supportEmail": "support@codibotics.firebaseapp.com"
       }
     }
   }

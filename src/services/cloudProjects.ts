@@ -1,5 +1,5 @@
 // ============================================================================
-// PulseMaker Simulator - Cloud Projects Firestore Service
+// CodiBotics Simulator - Cloud Projects Firestore Service
 // ============================================================================
 
 import {
@@ -15,7 +15,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { PulseMakerProjectFile, GradePhase } from '../types/simulator';
+import { CodiBoticsProjectFile, GradePhase } from '../types/simulator';
 
 export interface CloudProjectSummary {
   id: string;
@@ -25,7 +25,7 @@ export interface CloudProjectSummary {
   sharedId?: string;
 }
 
-export interface CloudProjectRecord extends PulseMakerProjectFile {
+export interface CloudProjectRecord extends CodiBoticsProjectFile {
   id: string;
   authorId: string;
   authorName: string;
@@ -43,7 +43,7 @@ export async function saveProjectToCloud(
   userId: string,
   userDisplayName: string,
   isAnonymous: boolean,
-  project: PulseMakerProjectFile,
+  project: CodiBoticsProjectFile,
   existingProjectId?: string
 ): Promise<string> {
   const projectId = existingProjectId || `proj_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -117,7 +117,7 @@ export async function fetchUserProjects(userId: string): Promise<CloudProjectSum
 export async function loadUserProject(
   userId: string,
   projectId: string
-): Promise<PulseMakerProjectFile | null> {
+): Promise<CodiBoticsProjectFile | null> {
   const projectRef = doc(db, 'users', userId, 'projects', projectId);
   const snap = await getDoc(projectRef);
 
@@ -125,7 +125,7 @@ export async function loadUserProject(
     return null;
   }
 
-  return snap.data() as PulseMakerProjectFile;
+  return snap.data() as CodiBoticsProjectFile;
 }
 
 /**
@@ -179,13 +179,13 @@ export async function deleteUserProject(userId: string, projectId: string): Prom
 export async function shareProjectToClassroom(
   userId: string,
   authorName: string,
-  fallbackProject: PulseMakerProjectFile,
+  fallbackProject: CodiBoticsProjectFile,
   projectId: string
 ): Promise<string> {
   const userProjectRef = doc(db, 'users', userId, 'projects', projectId);
   const userProjectSnap = await getDoc(userProjectRef);
   const storedData = userProjectSnap.exists()
-    ? (userProjectSnap.data() as PulseMakerProjectFile & { sharedId?: string })
+    ? (userProjectSnap.data() as CodiBoticsProjectFile & { sharedId?: string })
     : fallbackProject;
 
   // Reuse existing share code if already shared, otherwise generate a 6-character code
@@ -216,7 +216,7 @@ export async function shareProjectToClassroom(
 /**
  * Loads a shared project using its 6-character code.
  */
-export async function loadSharedProject(shareCode: string): Promise<PulseMakerProjectFile | null> {
+export async function loadSharedProject(shareCode: string): Promise<CodiBoticsProjectFile | null> {
   const code = shareCode.trim().toUpperCase();
   const shareDocRef = doc(db, 'shared_projects', code);
   const snap = await getDoc(shareDocRef);
@@ -225,5 +225,5 @@ export async function loadSharedProject(shareCode: string): Promise<PulseMakerPr
     return null;
   }
 
-  return snap.data() as PulseMakerProjectFile;
+  return snap.data() as CodiBoticsProjectFile;
 }

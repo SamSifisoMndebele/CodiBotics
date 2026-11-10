@@ -9,8 +9,8 @@ import {
 } from 'lucide-react';
 import { MicrocontrollerState, TraceLogEntry } from '../../types/simulator';
 import {
-  registerPulseMakerBlocks,
-  PULSEMAKER_TOOLBOX,
+  registerCodiBoticsBlocks,
+  CODIBOTICS_TOOLBOX,
 } from '../../engine/BlocklyConfig';
 import {
   compileWorkspaceToSteps,
@@ -95,11 +95,11 @@ export const IntermediateWorkspace: React.FC<IntermediateWorkspaceProps> = ({
 
   // Initialize Blockly Workspace
   useEffect(() => {
-    registerPulseMakerBlocks();
+    registerCodiBoticsBlocks();
     if (!blocklyDivRef.current) return;
 
     const ws = Blockly.inject(blocklyDivRef.current, {
-      toolbox: PULSEMAKER_TOOLBOX,
+      toolbox: CODIBOTICS_TOOLBOX,
       trashcan: true,
       zoom: {
         controls: true,

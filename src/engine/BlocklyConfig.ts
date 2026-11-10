@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly';
 
 // ============================================================================
-// Custom Blockly Definitions & Toolbox for PulseMaker Intermediate & Senior
+// Custom Blockly Definitions & Toolbox for CodiBotics Intermediate & Senior
 // 100% Client-Side, Offline-First
 // ============================================================================
 
@@ -52,7 +52,7 @@ export const ICON_PATTERNS: Record<string, number[][]> = {
   ],
 };
 
-export function registerPulseMakerBlocks() {
+export function registerCodiBoticsBlocks() {
   if (blocksRegistered) return;
   blocksRegistered = true;
 
@@ -237,7 +237,7 @@ export function registerPulseMakerBlocks() {
   ]);
 }
 
-export const PULSEMAKER_TOOLBOX = {
+export const CODIBOTICS_TOOLBOX = {
   kind: 'categoryToolbox',
   contents: [
     {
@@ -296,7 +296,7 @@ export const PULSEMAKER_TOOLBOX = {
 
 export const DEFAULT_INTERMEDIATE_XML = `<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="pm_log_message" x="25" y="25">
-    <field name="MSG">Starting PulseMaker Board...</field>
+    <field name="MSG">Starting CodiBotics Board...</field>
     <next>
       <block type="controls_repeat_ext">
         <value name="TIMES">

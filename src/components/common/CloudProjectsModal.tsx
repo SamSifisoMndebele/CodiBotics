@@ -1,12 +1,11 @@
 // ============================================================================
-// PulseMaker Simulator - Cloud Projects & Firebase Auth Modal
+// CodiBotics Simulator - Cloud Projects & Firebase Auth Modal
 // Zero-friction student sign-in + Facilitator controls + Cloud project management
 // ============================================================================
 
 import React, { useState, useEffect } from 'react';
 import {
   X,
-  Cloud,
   Save,
   FolderOpen,
   Share2,
@@ -20,7 +19,8 @@ import {
   AlertCircle,
   Loader2,
 } from 'lucide-react';
-import { PulseMakerProjectFile, GradePhase } from '../../types/simulator';
+import { CodiBoticsProjectFile, GradePhase } from '../../types/simulator';
+import { CodiBoticsLogo } from './CodiBoticsLogo';
 import { useFirebaseAuth } from '../../hooks/useFirebaseAuth';
 import {
   saveProjectToCloud,
@@ -35,8 +35,8 @@ import {
 interface CloudProjectsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentProject: PulseMakerProjectFile;
-  onLoadProject: (project: PulseMakerProjectFile) => void;
+  currentProject: CodiBoticsProjectFile;
+  onLoadProject: (project: CodiBoticsProjectFile) => void;
 }
 
 export const CloudProjectsModal: React.FC<CloudProjectsModalProps> = ({
@@ -59,7 +59,7 @@ export const CloudProjectsModal: React.FC<CloudProjectsModalProps> = ({
 
   // Project state
   const [projectName, setProjectName] = useState<string>(
-    currentProject.projectName || 'My PulseMaker Project'
+    currentProject.projectName || 'My CodiBotics Project'
   );
   const [userProjects, setUserProjects] = useState<CloudProjectSummary[]>([]);
   const [loadingProjects, setLoadingProjects] = useState<boolean>(false);
@@ -135,9 +135,9 @@ export const CloudProjectsModal: React.FC<CloudProjectsModalProps> = ({
     setIsSubmitting(true);
     setActionMessage(null);
     try {
-      const projectToSave: PulseMakerProjectFile = {
+      const projectToSave: CodiBoticsProjectFile = {
         ...currentProject,
-        projectName: projectName.trim() || 'PulseMaker Project',
+        projectName: projectName.trim() || 'CodiBotics Project',
       };
       await saveProjectToCloud(
         user.uid,
@@ -253,12 +253,10 @@ export const CloudProjectsModal: React.FC<CloudProjectsModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/50">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-              <Cloud className="w-6 h-6" />
-            </div>
+            <CodiBoticsLogo className="w-10 h-10 shrink-0 rounded-xl" />
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                PulseMaker Cloud Workspace
+                CodiBotics Cloud Workspace
               </h2>
               <p className="text-xs text-slate-400">
                 Save projects, access across devices, and share with classroom

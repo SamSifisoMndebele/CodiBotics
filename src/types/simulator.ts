@@ -1,5 +1,5 @@
 // ============================================================================
-// PulseMaker Simulator - Core TypeScript Interfaces & State Definitions
+// CodiBotics Simulator - Core TypeScript Interfaces & State Definitions
 // Designed for South African DBE CAPS Coding & Robotics (Grades R-7)
 // ============================================================================
 
@@ -158,7 +158,7 @@ export interface FacilitatorSettings {
   showGridCoordinates: boolean;
 }
 
-export interface PulseMakerProjectFile {
+export interface CodiBoticsProjectFile {
   version: string;
   timestamp: string;
   projectName: string;
@@ -180,3 +180,5 @@ export interface PulseMakerProjectFile {
     roverProgramType: 'line_follow' | 'obstacle_avoid' | 'manual_motors' | 'blockly_custom';
   };
 }
+
+export type PulseMakerProjectFile = CodiBoticsProjectFile;

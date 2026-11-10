@@ -8,7 +8,7 @@ import {
   LogicNode,
   LogicWire,
   FacilitatorSettings,
-  PulseMakerProjectFile,
+  CodiBoticsProjectFile,
 } from './types/simulator';
 import { HeaderNav } from './components/common/HeaderNav';
 import { FacilitatorModal } from './components/common/FacilitatorModal';
@@ -25,7 +25,8 @@ import { audioEngine } from './engine/AudioEngine';
 import { useOfflinePWA } from './hooks/useOfflinePWA';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 
-const STORAGE_KEY = 'pulsemaker_simulator_state_v1';
+const STORAGE_KEY = 'codibotics_simulator_state_v1';
+const LEGACY_STORAGE_KEY = 'pulsemaker_simulator_state_v1';
 
 export function App() {
   const { isOnline, markSaved } = useOfflinePWA();
@@ -74,9 +75,9 @@ export function App() {
   // Restore saved state from localStorage on first mount
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
       if (!raw) return;
-      const parsed = JSON.parse(raw) as Partial<PulseMakerProjectFile>;
+      const parsed = JSON.parse(raw) as Partial<CodiBoticsProjectFile>;
       if (parsed.activePhase) setActivePhase(parsed.activePhase);
       if (parsed.foundation?.mapId) setMapId(parsed.foundation.mapId);
       if (parsed.foundation?.commandQueue) {
@@ -102,10 +103,10 @@ export function App() {
 
   // Auto-persist to localStorage on state changes
   useEffect(() => {
-    const snapshot: PulseMakerProjectFile = {
+    const snapshot: CodiBoticsProjectFile = {
       version: '1.0.0',
       timestamp: new Date().toISOString(),
-      projectName: 'PulseMaker Classroom Project',
+      projectName: 'CodiBotics Classroom Project',
       activePhase,
       foundation: {
         mapId,
@@ -154,10 +155,10 @@ export function App() {
   };
 
   const handleExportProject = () => {
-    const payload: PulseMakerProjectFile = {
+    const payload: CodiBoticsProjectFile = {
       version: '1.0.0',
       timestamp: new Date().toISOString(),
-      projectName: `pulsemaker-${activePhase}-project`,
+      projectName: `codibotics-${activePhase}-project`,
       activePhase,
       foundation: { mapId, commandQueue },
       intermediate: { blocklyXml, temperature, lightLevel },
@@ -176,14 +177,14 @@ export function App() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `pulsemaker-${activePhase}-${new Date()
+    a.download = `codibotics-${activePhase}-${new Date()
       .toISOString()
-      .slice(0, 10)}.pulsemaker`;
+      .slice(0, 10)}.codibotics`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const loadProjectState = (data: PulseMakerProjectFile) => {
+  const loadProjectState = (data: CodiBoticsProjectFile) => {
     if (data.activePhase) setActivePhase(data.activePhase);
     if (data.foundation) {
       setMapId(data.foundation.mapId || 'township');
@@ -208,20 +209,20 @@ export function App() {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        const data = JSON.parse(String(reader.result)) as PulseMakerProjectFile;
+        const data = JSON.parse(String(reader.result)) as CodiBoticsProjectFile;
         loadProjectState(data);
       } catch (err) {
-        alert('Invalid .pulsemaker project file.');
+        alert('Invalid .codibotics project file.');
         console.error(err);
       }
     };
     reader.readAsText(file);
   };
 
-  const currentProjectSnapshot: PulseMakerProjectFile = {
+  const currentProjectSnapshot: CodiBoticsProjectFile = {
     version: '1.0.0',
     timestamp: new Date().toISOString(),
-    projectName: `pulsemaker-${activePhase}-project`,
+    projectName: `codibotics-${activePhase}-project`,
     activePhase,
     foundation: { mapId, commandQueue },
     intermediate: { blocklyXml, temperature, lightLevel },

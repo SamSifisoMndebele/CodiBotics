@@ -1,5 +1,5 @@
 // ============================================================================
-// PulseMaker Simulator - Firebase SDK Configuration & Initialization
+// CodiBotics Simulator - Firebase SDK Configuration & Initialization
 // ============================================================================
 
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
@@ -13,15 +13,15 @@ import {
 } from 'firebase/firestore';
 import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
 
-// Public Firebase Web Configuration
+// Public Firebase Web Configuration (CodiBotics)
 const firebaseConfig = {
-  apiKey: 'AIzaSyB7-DWkHoq1Yms6iIkCR1QEyOHNS1x2eAQ',
-  authDomain: 'pulsemaker-simulator.firebaseapp.com',
-  projectId: 'pulsemaker-simulator',
-  storageBucket: 'pulsemaker-simulator.firebasestorage.app',
-  messagingSenderId: '220201944572',
-  appId: '1:220201944572:web:5c895ca0587f752eb05e79',
-  measurementId: 'G-20S1P4H4CG',
+  apiKey: 'AIzaSyDInjDWjU1f0GEu5798ZmG4J_kUybdjASA',
+  authDomain: 'codibotics.firebaseapp.com',
+  projectId: 'codibotics',
+  storageBucket: 'codibotics.firebasestorage.app',
+  messagingSenderId: '1016315955864',
+  appId: '1:1016315955864:web:5f56f370714fce1883deed',
+  measurementId: 'G-YHQW5MX29B',
 };
 
 // Singleton App Instance

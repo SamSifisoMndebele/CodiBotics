@@ -1,5 +1,5 @@
 // ============================================================================
-// PulseMaker Simulator - Firebase Authentication Hook
+// CodiBotics Simulator - Firebase Authentication Hook
 // Supports Anonymous Student Logins and Facilitator Email/Google Auth
 // ============================================================================
 

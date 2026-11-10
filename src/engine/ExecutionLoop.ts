@@ -145,12 +145,12 @@ export function compileWorkspaceToSteps(
  */
 export function transpileWorkspaceToPython(workspace: Blockly.Workspace | null): string {
   if (!workspace) {
-    return '# PulseMaker Python Preview\nfrom pulsemaker import *\n';
+    return '# CodiBotics Python Preview\nfrom codibotics import *\n';
   }
 
   const lines: string[] = [
-    '# Auto-generated MicroPython from PulseMaker Blocks',
-    'from pulsemaker import display, music, pin0, pin1, pin2, button_a, button_b, sensors, Icon',
+    '# Auto-generated MicroPython from CodiBotics Blocks',
+    'from codibotics import display, music, pin0, pin1, pin2, button_a, button_b, sensors, Icon',
     'import time',
     '',
   ];

@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Lock, Unlock, Printer, CheckCircle2 } from 'lucide-react';
 import { FacilitatorSettings, GradePhase } from '../../types/simulator';
+import { CodiBoticsLogo } from './CodiBoticsLogo';
 
 interface FacilitatorModalProps {
   isOpen: boolean;
@@ -28,13 +29,16 @@ export const FacilitatorModal: React.FC<FacilitatorModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
       <div className="bg-slate-900 border-2 border-slate-700 rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-          <div>
-            <h2 className="text-xl font-black text-white">
-              Teacher & Facilitator Control Panel
-            </h2>
-            <p className="text-xs text-slate-400">
-              DBE CAPS Coding & Robotics Classroom Management & Offline Activity Cards
-            </p>
+          <div className="flex items-center gap-3">
+            <CodiBoticsLogo className="w-10 h-10 shrink-0 rounded-xl" />
+            <div>
+              <h2 className="text-xl font-black text-white">
+                CodiBotics Teacher & Facilitator Panel
+              </h2>
+              <p className="text-xs text-slate-400">
+                DBE CAPS Coding & Robotics Classroom Management & Offline Activity Cards
+              </p>
+            </div>
           </div>
           <button
             onClick={onClose}

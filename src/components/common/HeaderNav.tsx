@@ -16,6 +16,7 @@ import {
   Cloud,
 } from 'lucide-react';
 import { GradePhase, FacilitatorSettings } from '../../types/simulator';
+import { CodiBoticsLogo } from './CodiBoticsLogo';
 
 interface HeaderNavProps {
   activePhase: GradePhase;
@@ -87,22 +88,18 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
       <div className="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
         {/* Brand Identity */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 via-teal-600 to-amber-500 p-0.5 shadow-lg shadow-emerald-500/20">
-            <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <Bot className="w-6 h-6 text-emerald-400" />
-            </div>
-          </div>
+          <CodiBoticsLogo className="w-10 h-10 shrink-0 shadow-lg shadow-emerald-500/20 rounded-xl" />
           <div>
             <div className="flex items-center gap-2">
               <h1 className="font-bold text-lg tracking-tight text-white leading-none">
-                PulseMaker
+                Codi<span className="text-emerald-400">Botics</span>
               </h1>
               <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                 DBE CAPS
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5 hidden sm:block">
-              Zero-Install Offline Robotics & Logic Simulator
+              Zero-Install Offline Coding & Robotics Simulator
             </p>
           </div>
         </div>
@@ -187,17 +184,17 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             </span>
           </button>
 
-          {/* Save (.pulsemaker JSON) */}
+          {/* Save (.codibotics JSON) */}
           <button
             onClick={onExportProject}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-colors"
-            title="Save project to computer or USB flash drive (.pulsemaker)"
+            title="Save project to computer or USB flash drive (.codibotics)"
           >
             <Download className="w-3.5 h-3.5 text-emerald-400" />
             <span className="hidden lg:inline">Save File</span>
           </button>
 
-          {/* Load (.pulsemaker JSON) */}
+          {/* Load (.codibotics JSON) */}
           <button
             onClick={() => fileInputRef.current?.click()}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-colors"
@@ -209,7 +206,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           <input
             ref={fileInputRef}
             type="file"
-            accept=".pulsemaker,.json"
+            accept=".codibotics,.pulsemaker,.json"
             onChange={handleFileChange}
             className="hidden"
           />
