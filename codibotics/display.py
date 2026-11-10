@@ -65,7 +65,7 @@ class Display:
             b_left, b_right = "+", "+"
             h_bar, v_bar = "-", "|"
 
-        title = f"[ PulseBit 5x5: {header} ]"
+        title = f"[ CodiBit 5x5: {header} ]"
         total_width = 32
         left_pad = (total_width - len(title) - 2) // 2
         right_pad = total_width - len(title) - 2 - left_pad
