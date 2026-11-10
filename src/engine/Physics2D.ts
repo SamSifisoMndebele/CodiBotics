@@ -126,9 +126,16 @@ export function computeOpticalLineSensors(
   y: number,
   angle: number,
   lines: LineSegment[]
-): { leftSensor: boolean; rightSensor: boolean; leftPt: { x: number; y: number }; rightPt: { x: number; y: number } } {
+): {
+  leftSensor: boolean;
+  rightSensor: boolean;
+  leftPt: { x: number; y: number };
+  rightPt: { x: number; y: number };
+  leftDist: number;
+  rightDist: number;
+} {
   const forwardOffset = ROVER_RADIUS + 4;
-  const sideOffset = 10;
+  const sideOffset = 9;
 
   const leftPt = {
     x: x + Math.cos(angle) * forwardOffset + Math.cos(angle - Math.PI / 2) * sideOffset,
@@ -142,26 +149,27 @@ export function computeOpticalLineSensors(
 
   const lineThicknessThreshold = 11;
 
-  const leftSensor = lines.some(
-    (seg) =>
-      pointToSegmentDistance(leftPt.x, leftPt.y, seg.x1, seg.y1, seg.x2, seg.y2) <=
-      lineThicknessThreshold
-  );
+  let leftDist = Infinity;
+  let rightDist = Infinity;
 
-  const rightSensor = lines.some(
-    (seg) =>
-      pointToSegmentDistance(rightPt.x, rightPt.y, seg.x1, seg.y1, seg.x2, seg.y2) <=
-      lineThicknessThreshold
-  );
+  for (const seg of lines) {
+    const dl = pointToSegmentDistance(leftPt.x, leftPt.y, seg.x1, seg.y1, seg.x2, seg.y2);
+    if (dl < leftDist) leftDist = dl;
+    const dr = pointToSegmentDistance(rightPt.x, rightPt.y, seg.x1, seg.y1, seg.x2, seg.y2);
+    if (dr < rightDist) rightDist = dr;
+  }
 
-  return { leftSensor, rightSensor, leftPt, rightPt };
+  const leftSensor = leftDist <= lineThicknessThreshold;
+  const rightSensor = rightDist <= lineThicknessThreshold;
+
+  return { leftSensor, rightSensor, leftPt, rightPt, leftDist, rightDist };
 }
 
 /**
  * Step the 2D Differential Drive Rover forward by dt seconds.
- * Equations:
+ * In 2D canvas coordinates (x right, y down, angle clockwise from +x):
  *   v = (v_L + v_R) / 2
- *   omega = (v_R - v_L) / L
+ *   omega = (v_L - v_R) / L  (v_L > v_R turns clockwise/right; v_R > v_L turns counter-clockwise/left)
  */
 export function stepRoverPhysics(
   state: RoverState,
@@ -176,11 +184,12 @@ export function stepRoverPhysics(
   const vR = state.vRight * speedScale;
 
   const linearV = (vL + vR) / 2;
-  const omega = (vR - vL) / ROVER_WHEELBASE;
+  const omega = (vL - vR) / ROVER_WHEELBASE;
 
   const nextAngle = state.angle + omega * dt;
-  let nextX = state.x + linearV * Math.cos(nextAngle) * dt;
-  let nextY = state.y + linearV * Math.sin(nextAngle) * dt;
+  const midAngle = state.angle + 0.5 * omega * dt;
+  let nextX = state.x + linearV * Math.cos(midAngle) * dt;
+  let nextY = state.y + linearV * Math.sin(midAngle) * dt;
 
   // Clamp inside arena walls
   nextX = Math.max(ROVER_RADIUS + 4, Math.min(canvasWidth - ROVER_RADIUS - 4, nextX));

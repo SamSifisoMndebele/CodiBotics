@@ -53,9 +53,7 @@ export function App() {
 
   // Phase 3 State: Senior
   const [seniorSubMode, setSeniorSubMode] = useState<SeniorSubMode>('rover');
-  const [mazeWalls, setMazeWalls] = useState<MazeWall[]>([
-    { id: 'w-init-1', x1: 250, y1: 70, x2: 250, y2: 180 },
-  ]);
+  const [mazeWalls, setMazeWalls] = useState<MazeWall[]>([]);
   const [logicNodes, setLogicNodes] = useState<LogicNode[]>(DEFAULT_LOGIC_NODES);
   const [logicWires, setLogicWires] = useState<LogicWire[]>(DEFAULT_LOGIC_WIRES);
   const [roverProgramType, setRoverProgramType] = useState<
@@ -92,7 +90,9 @@ export function App() {
         setLightLevel(parsed.intermediate.lightLevel);
       }
       if (parsed.senior?.subMode) setSeniorSubMode(parsed.senior.subMode);
-      if (parsed.senior?.walls) setMazeWalls(parsed.senior.walls);
+      if (parsed.senior?.walls) {
+        setMazeWalls(parsed.senior.walls.filter((w) => w.id !== 'w-init-1'));
+      }
       if (parsed.senior?.logicNodes) setLogicNodes(parsed.senior.logicNodes);
       if (parsed.senior?.logicWires) setLogicWires(parsed.senior.logicWires);
     } catch (e) {

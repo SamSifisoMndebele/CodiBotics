@@ -100,6 +100,8 @@ export const IntermediateWorkspace: React.FC<IntermediateWorkspaceProps> = ({
 
     const ws = Blockly.inject(blocklyDivRef.current, {
       toolbox: CODIBOTICS_TOOLBOX,
+      horizontalLayout: true,
+      toolboxPosition: 'end',
       trashcan: true,
       zoom: {
         controls: true,
@@ -127,7 +129,8 @@ export const IntermediateWorkspace: React.FC<IntermediateWorkspaceProps> = ({
       }
     }
 
-    const updateListener = () => {
+    const updateListener = (event: Blockly.Events.Abstract) => {
+      if (event.isUiEvent) return;
       const dom = Blockly.Xml.workspaceToDom(ws);
       const xmlText = Blockly.Xml.domToText(dom);
       onChangeXml(xmlText);
@@ -137,7 +140,13 @@ export const IntermediateWorkspace: React.FC<IntermediateWorkspaceProps> = ({
     ws.addChangeListener(updateListener);
     setPythonCode(transpileWorkspaceToPython(ws));
 
+    const resizeObserver = new ResizeObserver(() => {
+      Blockly.svgResize(ws);
+    });
+    resizeObserver.observe(blocklyDivRef.current);
+
     return () => {
+      resizeObserver.disconnect();
       ws.removeChangeListener(updateListener);
       ws.dispose();
       workspaceRef.current = null;
@@ -408,7 +417,7 @@ export const IntermediateWorkspace: React.FC<IntermediateWorkspaceProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-4">
           <div className="rounded-2xl overflow-hidden border-2 border-slate-800 bg-slate-900 shadow-2xl">
-            <div ref={blocklyDivRef} className="w-full h-[470px]" />
+            <div ref={blocklyDivRef} className="w-full h-[540px]" />
           </div>
 
           {showPythonModal && (

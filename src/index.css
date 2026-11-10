@@ -9,22 +9,91 @@
   }
 }
 
-/* Blockly Dark Theme Tweaks for Classroom Readability */
+/* Blockly Dark Theme & Bottom Category Tabs Styling */
 .blocklyMainBackground {
   stroke: #1e293b !important;
   fill: #0f172a !important;
 }
+
 .blocklyToolboxDiv {
-  background-color: #1e293b !important;
+  background-color: #0f172a !important;
   color: #f8fafc !important;
-  border-right: 1px solid #334155 !important;
+  border-top: 2px solid #1e293b !important;
+  border-right: none !important;
+  padding: 8px 12px !important;
+  box-sizing: border-box !important;
 }
+
+.blocklyToolboxDiv[layout="h"] .blocklyToolboxContents {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.blocklyToolboxCategory {
+  height: auto !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
 .blocklyTreeRow {
-  padding: 6px 10px !important;
-  margin-bottom: 4px !important;
-  border-radius: 8px !important;
+  height: auto !important;
+  min-height: 38px !important;
+  line-height: 1.25 !important;
+  padding: 8px 14px !important;
+  margin: 0 !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #1e293b;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.15s ease, transform 0.1s ease;
 }
+
+.blocklyTreeRow:not(.blocklyTreeSelected):hover {
+  background-color: #334155 !important;
+}
+
+.blocklyTreeRow.blocklyTreeSelected {
+  box-shadow: 0 0 0 2px #f8fafc inset !important;
+}
+
+/* Ensure clicks always land on .blocklyTreeRow (which holds the category ID) */
+.blocklyTreeRowContentContainer,
+.blocklyTreeRowContentContainer * {
+  pointer-events: none !important;
+}
+
+.blocklyTreeRowContentContainer {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.blocklyTreeLabel {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  padding: 0 4px !important;
+  line-height: 1.2 !important;
+}
+
 .blocklyFlyoutBackground {
   fill: #1e293b !important;
-  fill-opacity: 0.95 !important;
+  fill-opacity: 0.98 !important;
+}
+
+.blocklyDropDownDiv {
+  z-index: 9999 !important;
+}
+
+.blocklyWidgetDiv {
+  z-index: 9999 !important;
 }

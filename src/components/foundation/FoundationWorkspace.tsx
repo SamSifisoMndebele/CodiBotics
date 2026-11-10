@@ -91,7 +91,41 @@ export const FoundationWorkspace: React.FC<FoundationWorkspaceProps> = ({
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       type,
     };
-    onChangeQueue((prev) => [...prev, newCmd]);
+    onChangeQueue((prev) => (prev.length >= 24 ? prev : [...prev, newCmd]));
+  };
+
+  const handleInsertCommandAt = (index: number, type: FloorBotCommandType) => {
+    audioEngine.playClick();
+    const newCmd: FloorBotCommand = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      type,
+    };
+    onChangeQueue((prev) => {
+      if (prev.length >= 24) return prev;
+      const next = [...prev];
+      const clampedIdx = Math.max(0, Math.min(index, next.length));
+      next.splice(clampedIdx, 0, newCmd);
+      return next;
+    });
+  };
+
+  const handleMoveCommand = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
+    audioEngine.playClick();
+    onChangeQueue((prev) => {
+      if (
+        fromIndex < 0 ||
+        fromIndex >= prev.length ||
+        toIndex < 0 ||
+        toIndex >= prev.length
+      ) {
+        return prev;
+      }
+      const next = [...prev];
+      const [moved] = next.splice(fromIndex, 1);
+      next.splice(toIndex, 0, moved);
+      return next;
+    });
   };
 
   const handleRemoveCommandAt = (index: number) => {
@@ -380,9 +414,12 @@ export const FoundationWorkspace: React.FC<FoundationWorkspaceProps> = ({
         <div className="lg:col-span-7">
           <IconCommandBar
             queue={commandQueue}
+            startDir={currentMap.startDir}
             activeStepIndex={activeStepIndex}
             isRunning={isRunning}
             onAddCommand={handleAddCommand}
+            onInsertCommandAt={handleInsertCommandAt}
+            onMoveCommand={handleMoveCommand}
             onRemoveCommandAt={handleRemoveCommandAt}
             onClearQueue={handleClearQueue}
             onUndoLast={handleUndoLast}
